@@ -11,6 +11,7 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 import logging
+import sys
 from botocore.compat import json
 
 from botocore.utils import set_value_from_jmespath
@@ -247,8 +248,15 @@ class TextFormatter(Formatter):
                         {'NextToken': {'NextToken': response.resume_token}},
                         stream)
             else:
+            	# Customizacao para retornar apenas o maior valor
                 self._remove_request_id(response)
-                self._format_response(response, stream)
+                datapoints = response['Datapoints']
+	                #response = {}
+                resposta = []
+                for ocorrencias in datapoints:
+                	resposta.append(list(ocorrencias.values()))
+                resposta = list(max(resposta))[1]
+                self._format_response(resposta, stream)
         finally:
             # flush is needed to avoid the "close failed in file object
             # destructor" in python2.x (see http://bugs.python.org/issue11380).

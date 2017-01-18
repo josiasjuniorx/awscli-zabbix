@@ -12,6 +12,7 @@
 # language governing permissions and limitations under the License.
 import sys
 import logging
+from datetime import datetime, timedelta
 
 import botocore.session
 from botocore import __version__ as botocore_version
@@ -168,8 +169,20 @@ class CLIDriver(object):
             args list of ``['s3', 'list-objects', '--bucket', 'foo']``.
 
         """
+        # Customizacao para adicionar parametro --last
         if args is None:
             args = sys.argv[1:]
+            if any('--last' in tempo for tempo in args):
+                args.remove('--last')
+                datafinal = datetime.utcnow()
+                datainicial = datafinal - timedelta(minutes=5)
+                args.extend([
+                            '--start-time',
+                            datainicial.strftime("%Y-%m-%d-%H:%M"),
+                            '--end-time',
+                            datafinal.strftime("%Y-%m-%d-%H:%M")
+                            ])
+                #print args
         parser = self._create_parser()
         command_table = self._get_command_table()
         parsed_args, remaining = parser.parse_known_args(args)
