@@ -18,7 +18,7 @@ AWS_ACCESS_KEY_ID=*** AWS_SECRET_ACCESS_KEY=*** aws cloudwatch get-metric-statis
 
 
 
-
+Templates availables -> https://github.com/josiasjuniorx/zabbix-templates
 
 
 
